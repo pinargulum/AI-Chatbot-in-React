@@ -1,16 +1,42 @@
+
 import "../Footer/Footer.css";
+import { useState } from "react";
+import { useRef } from "react";
+
 function Footer() {
+ 
+  const [chatHistory, setChatHistory] = useState([]);
+  const inputRef = useRef();
+
+  const handleFormSubmit = (e) => {
+    e.preventDefault(e);
+    const userMessage = inputRef.current.value.trim();
+    if (!userMessage) {
+      console.log(userMessage);
+      inputRef.current.value = "";
+    }
+
+    setChatHistory((history) => [
+      ...history,
+      { role: "user", text: userMessage },
+    ]);
+  };
+
   return (
     <>
       <div className="chat-footer">
         <form
           action="#"
           className="chat-form"
+          onSubmit={handleFormSubmit}
         >
-          <textarea
+          <input
+          inputRef={inputRef}
+            type="text"
             placeholder="Message..."
             className="message-input"
-          ></textarea>
+            required
+          />
           <div className="chat-controls">
             <button
               className="material-symbols-rounded"
@@ -28,6 +54,7 @@ function Footer() {
               className="material-symbols-rounded"
               id="send-message"
               type="submit"
+              //onClick={handleButtonSubmit}
             >
               arrow_upward
             </button>
