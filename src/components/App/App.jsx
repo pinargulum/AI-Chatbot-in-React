@@ -1,18 +1,102 @@
 import "../App/App.css";
-import BotMessage from "../BotMessage/BotMessage.jsx";
+
 import Header from "../Header/Header.jsx";
-import Footer from "../Footer/Footer.jsx";
+import React from "react";
+import ChatMessage from "../ChatMessage/ChatMessage.jsx";
+import BotAvatar from "../Header/BotAvatar.jsx";
+import ChatForm from "../ChatForm/ChatForm.jsx";
+import { useState } from "react";
+
+
+
+
+
 
 function App() {
+  const [chatHistory, setChatHistory] = useState([]);
+  function checkResponse(res) {
+    if (res.ok) {
+      return res.json();
+    }
+    return Promise.reject(`Error: ${res.status}`);
+  }
+  async function generateBotResponse(history) {
+    history = history.map(({ role, text }) => ({ role, parts: [{ text }] }));
+    const updateHistory = (text) => {
+      setChatHistory(prev => [...prev.filter(msg => msg.text !== "thinking..."), {role: "model", text}])
+    }
+    return await fetch(
+      import.meta.env.VITE_API_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/Json" },
+      body: JSON.stringify({ contents: history })
+        })
+        
+      .then(checkResponse)
+      .then((data) => {
+          const apiResponseText = data.candidates[0].content.parts[0].text
+          .replace(/\*\*(.*?)\*\*/g, "$1")
+          .trim();
+        updateHistory(apiResponseText);
+      })
+      .catch(console.error);
+  }
   
+  /*
+  const generateBotResponse = async (history) => {
+    const updateHistory = (text) => {
+      setChatHistory(prev => [...prev.filter(msg => msg.text !== "thinking..."), {role: "model", text}])
+    }
+    history = history.map(({ role, text }) => ({ role, parts: [{ text }] }));
+    const requestOptions = {
+      method: "POST",
+      headers: { "Content-Type": "application/Json" },
+      body: JSON.stringify({ contents: history }),
+    };
+    try {
+      const response = await fetch(
+        import.meta.env.VITE_API_URL,
+        requestOptions
+      );
+      const data = await response.json();
+      if (response.ok)
+        throw new Error(data.error.m || "Somting went wrong!");
+
+      const apiResponseText = data.candidates[0].content.parts[0].text
+        //.replace(/\*\*(.*?)\*\*///g, "$1")
+        //.trim();
+      //updateHistory(apiResponseText);
+    //} catch (error) {
+      //console.log(error);
+   // }
+  //};
+
   return (
-    <>
+    <div className="container">
       <div className="chatbot-popup">
         <Header />
-        <BotMessage />
-        <Footer />
+        <div className="chat-body">
+          <div className="message bot-message">
+            <BotAvatar />
+            <p className="message-text">Hi there! How can I help you today?</p>
+          </div>
+
+          {chatHistory.map((chat, index) => (
+            <ChatMessage
+              key={index}
+              chat={chat}
+            />
+          ))}
+        </div>
+        <div className="chat-footer">
+          <ChatForm
+            chatHistory={chatHistory}
+            setChatHistory={setChatHistory}
+            generateBotResponse={generateBotResponse}
+          />
+        </div>
       </div>
-    </>
+    </div>
   );
 }
 

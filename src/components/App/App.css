@@ -23,3 +23,10 @@ body {
   box-shadow: 0 0 128px 0 rgba(0, 0, 0, 0.1); 
 
 }
+.chat-footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  background: #fff;
+  padding: 15px 22px 20px;
+}
