@@ -8,39 +8,38 @@ import ChatForm from "../ChatForm/ChatForm.jsx";
 //import { getBotResponse } from "../Utility/Api.js";
 import { useState } from "react";
 
-
-
-
-
-
 function App() {
   const [chatHistory, setChatHistory] = useState([]);
-  
+
   async function generateBotResponse(history) {
     history = history.map(({ role, text }) => ({ role, parts: [{ text }] }));
     const updateHistory = (text) => {
-      setChatHistory(prev => [...prev.filter(msg => msg.text !== "thinking..."), {role: "model", text}])
-    }
-    function checkResponse (res) {
+      setChatHistory((prev) => [
+        ...prev.filter((msg) => msg.text !== "Thinking..."),
+        { role: "model", text },
+      ]);
+    };
+    function checkResponse(res) {
       if (res.ok) {
-        return res.json()
+        return res.json();
       }
-      return Promise.reject(`Error: ${res.status}`)
+      return Promise.reject(`Error: ${res.status}`);
     }
-    return  fetch(import.meta.env.VITE_API_URL, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/Json' },
-      body: JSON.stringify({ contents: history })
-    }).then(checkResponse)
+    return fetch(import.meta.env.VITE_API_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/Json" },
+      body: JSON.stringify({ contents: history }),
+    })
+      .then(checkResponse)
       .then((data) => {
-          const apiResponseText = data.candidates[0].content.parts[0].text
+        const apiResponseText = data.candidates[0].content.parts[0].text
           .replace(/\*\*(.*?)\*\*/g, "$1")
           .trim();
         updateHistory(apiResponseText);
       })
       .catch(console.error);
   }
-  
+
   return (
     <div className="container">
       <div className="chatbot-popup">
