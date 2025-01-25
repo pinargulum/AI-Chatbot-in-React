@@ -118,20 +118,8 @@
   padding-right: 6px;
   gap: 3px;
 }
-.material-symbols-rounded {
-  font-size: 1.15rem;
-  color: #706db0;
-  border-radius: 50%;
-  height: 35px;
-  width: 35px;
-  border: none;
-  cursor: pointer;
-  transition: 0.2s ease;
-  background: none;
-}
-.material-symbols-rounded:hover {
-  background: #f1f1ff;
-}
+
+
 #send-message {
   display: flex;
   margin-right: 9px;

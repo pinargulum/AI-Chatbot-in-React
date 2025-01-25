@@ -1,15 +1,16 @@
 import "../App/App.css";
 
 import Header from "../Header/Header.jsx";
-import React from "react";
+import React, { useState, useEffect, useRef } from "react";
 import ChatMessage from "../ChatMessage/ChatMessage.jsx";
 import BotAvatar from "../Header/BotAvatar.jsx";
 import ChatForm from "../ChatForm/ChatForm.jsx";
 //import { getBotResponse } from "../Utility/Api.js";
-import { useState } from "react";
 
 function App() {
   const [chatHistory, setChatHistory] = useState([]);
+  const [showChatbot, setShowChatbot] = useState(false);
+  const chatBodyRef = useRef();
 
   async function generateBotResponse(history) {
     history = history.map(({ role, text }) => ({ role, parts: [{ text }] }));
@@ -39,12 +40,26 @@ function App() {
       })
       .catch(console.error);
   }
-
+  useEffect(() => {
+    chatBodyRef.current.scrollTo({ top: chatBodyRef.current.scrollHeight });
+  }, [chatHistory]);
   return (
-    <div className="container">
+    <div className={`container ${showChatbot ? "show-chatbot" : ""}`}>
+      <button
+        id="chatbot-toggler"
+        onClick={() => setShowChatbot((prev) => !prev)}
+      >
+        <span className="material-symbols-rounded">mode_comment</span>
+        <span className="material-symbols-rounded">close</span>
+        
+      </button>
+
       <div className="chatbot-popup">
         <Header />
-        <div className="chat-body">
+        <div
+          ref={chatBodyRef}
+          className="chat-body"
+        >
           <div className="message bot-message">
             <BotAvatar />
             <p className="message-text">Hi there! How can I help you today?</p>

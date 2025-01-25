@@ -7,21 +7,43 @@
   box-sizing: border-box;
 }
 body {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  width: 100%;
   min-height: 100vh;
-  background: linear-gradient(#eee, #c8c7ff);
+  background: linear-gradient(#f4f0ff, #dacdff);
 }
 .chatbot-popup {
-  position: relative;
+  position: fixed;
+  opacity: 0;
+  pointer-events: none;
+  bottom: 70px;
+  right: 135px;
   width: 420px;
   background: #fff;
   overflow: hidden;
   border-radius: 15px;
   justify-content: space-between;
-  box-shadow: 0 0 128px 0 rgba(0, 0, 0, 0.1); 
-
+  box-shadow: 0 0 128px 0 rgba(0, 0, 0, 0.1);
+}
+.show-chatbot .chatbot-popup  {
+  opacity: 1;
+  pointer-events: auto;
+}
+#chatbot-toggler {
+  position: fixed;
+  bottom: 15px;
+  right: 135px;
+  border: none;
+  height: 50px;
+  width: 50px;
+  display: flex;
+  cursor: pointer;
+  border-radius: 50%;
+  align-items: center;
+  justify-content: center;
+  background: #5350c4;
+}
+#chatbot-toggler span {
+  position: absolute;
 }
 .chat-footer {
   position: absolute;
