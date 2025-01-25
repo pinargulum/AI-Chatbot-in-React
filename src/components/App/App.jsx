@@ -43,11 +43,14 @@ function App() {
   useEffect(() => {
     chatBodyRef.current.scrollTo({ top: chatBodyRef.current.scrollHeight });
   }, [chatHistory]);
+  const handleButtonClick = () => {
+    setShowChatbot((prev) => !prev)
+  }
   return (
     <div className={`container ${showChatbot ? "show-chatbot" : ""}`}>
       <button
         id="chatbot-toggler"
-        onClick={() => setShowChatbot((prev) => !prev)}
+        onClick={handleButtonClick}
       >
         <span className="material-symbols-rounded">mode_comment</span>
         <span className="material-symbols-rounded">close</span>
@@ -55,7 +58,7 @@ function App() {
       </button>
 
       <div className="chatbot-popup">
-        <Header />
+        <Header onClick={handleButtonClick}/>
         <div
           ref={chatBodyRef}
           className="chat-body"
