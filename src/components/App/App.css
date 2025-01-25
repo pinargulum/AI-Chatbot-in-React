@@ -32,11 +32,11 @@ body {
 }
 #chatbot-toggler {
   position: fixed;
-  bottom: 15px;
-  right: 155px;
+  bottom: 20px;
+  right: 135px;
   border: none;
-  height: 50px;
-  width: 50px;
+  height: 42px;
+  width: 42px;
   display: flex;
   cursor: pointer;
   border-radius: 50%;
